@@ -477,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------- 10. GỬI ĐƠN HÀNG VỀ BACKEND ---------- */
 
   // TODO: thay bằng URL Cloudflare Worker / Backend thật xử lý đơn hàng.
-  const API_ENDPOINT = "URL_WORKER_CUA_TOI";
+  const API_ENDPOINT = "https://vidisanar-api.tranchuyen091289.workers.dev/api/order";
 
   const BANKS = {
     mb: { code: "MB", account: "6619121964", accountName: "BUI THU HA", labelKey: "bank_mb_tab" },
