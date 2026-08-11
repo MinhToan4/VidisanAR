@@ -299,52 +299,65 @@
         </form>
 
         <!-- Doanh nghiệp -->
-        <form class="order-card order-card--business reveal" id="formDoanhNghiep">
+        <form class="order-card order-card--business reveal" id="formDoanhNghiep" novalidate>
           <div class="order-card__body">
-            <h3 class="order-card__heading" data-i18n="order_business_title">Doanh nghiệp - Ngoại giao</h3>
-            <p class="order-card__subtitle" data-i18n="order_business_product">Quà tặng số lượng lớn theo yêu cầu</p>
-            <p class="order-card__desc" data-i18n="order_business_desc_1">Khắc logo lên hộp gỗ, in thiệp riêng song ngữ, chọn cấu hình hộp theo nhân sự và đối tác. Tư vấn 1–1 với đội ngũ thiết kế của Vị Di Sản.</p>
-            <p class="order-card__desc" data-i18n="order_business_desc_2">Đặt số lượng từ 20 hộp trở lên, vui lòng liên hệ trực tiếp để được tư vấn ưu đãi và lịch giao hàng.</p>
 
-            <div class="order-card__contact">
-              <div>
-                <span class="order-card__contact-label" data-i18n="order_contact_phone_label">Điện thoại</span>
-                <a href="tel:0915080988" class="order-card__contact-value">0915 080 988</a>
+            <div class="order-card__form-fields" id="businessFormFields">
+              <h3 class="order-card__heading" data-i18n="order_business_title">Doanh nghiệp - Ngoại giao</h3>
+              <p class="order-card__subtitle" data-i18n="order_business_product">Quà tặng số lượng lớn theo yêu cầu</p>
+              <p class="order-card__desc" data-i18n="order_business_desc_1">Khắc logo lên hộp gỗ, in thiệp riêng song ngữ, chọn cấu hình hộp theo nhân sự và đối tác. Tư vấn 1–1 với đội ngũ thiết kế của Vị Di Sản.</p>
+              <p class="order-card__desc" data-i18n="order_business_desc_2">Đặt số lượng từ 20 hộp trở lên, vui lòng liên hệ trực tiếp để được tư vấn ưu đãi và lịch giao hàng.</p>
+
+              <div class="order-card__contact">
+                <div>
+                  <span class="order-card__contact-label" data-i18n="order_contact_phone_label">Điện thoại</span>
+                  <a href="tel:0915080988" class="order-card__contact-value">0915 080 988</a>
+                </div>
+                <div>
+                  <span class="order-card__contact-label" data-i18n="order_contact_email_label">Email</span>
+                  <a href="mailto:congtytnhh.nuongbac90@gmail.com" class="order-card__contact-value">congtytnhh.nuongbac90@gmail.com</a>
+                </div>
               </div>
-              <div>
-                <span class="order-card__contact-label" data-i18n="order_contact_email_label">Email</span>
-                <a href="mailto:congtytnhh.nuongbac90@gmail.com" class="order-card__contact-value">congtytnhh.nuongbac90@gmail.com</a>
+
+              <div class="order-card__grid">
+                <div class="order-card__field order-card__field--underline">
+                  <label for="hoTen" data-i18n="label_fullname">Họ và tên</label>
+                  <input type="text" id="hoTen" name="hoTen" placeholder="Nhập họ tên của bạn" data-i18n-placeholder="placeholder_fullname" required>
+                </div>
+                <div class="order-card__field order-card__field--underline">
+                  <label for="donVi" data-i18n="label_company">Đơn vị</label>
+                  <input type="text" id="donVi" name="donVi" placeholder="Nhập tên đơn vị" data-i18n-placeholder="placeholder_company">
+                </div>
+                <div class="order-card__field order-card__field--underline">
+                  <label for="soDienThoaiDN" data-i18n="label_phone_required">Số điện thoại *</label>
+                  <input type="tel" id="soDienThoaiDN" name="soDienThoaiDN" placeholder="Nhập số điện thoại" data-i18n-placeholder="placeholder_phone" required>
+                </div>
+                <div class="order-card__field order-card__field--underline">
+                  <label for="email" data-i18n="label_email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="Nhập email của bạn" data-i18n-placeholder="placeholder_email">
+                </div>
+                <div class="order-card__field order-card__field--underline">
+                  <label for="soLuongDat" data-i18n="label_qty_order">Số lượng</label>
+                  <input type="number" id="soLuongDat" name="soLuongDat" placeholder="Nhập số lượng cần đặt" min="1" data-i18n-placeholder="placeholder_qty_order">
+                </div>
+              </div>
+
+              <div class="order-card__field order-card__field--underline order-card__field--full">
+                <label for="yeuCau" data-i18n="label_request">Yêu cầu cụ thể</label>
+                <input type="text" id="yeuCau" name="yeuCau" placeholder="Mô tả yêu cầu của bạn" data-i18n-placeholder="placeholder_request">
+              </div>
+
+              <div class="order-card__footer-row">
+                <p class="order-card__note" data-i18n="order_response_note">Phản hồi trong 24 giờ làm việc.</p>
+                <button type="submit" class="btn btn--on-dark" data-i18n="order_btn_submit">Gửi yêu cầu!</button>
               </div>
             </div>
 
-            <div class="order-card__grid">
-              <div class="order-card__field order-card__field--underline">
-                <label for="hoTen" data-i18n="label_fullname">Họ và tên</label>
-                <input type="text" id="hoTen" name="hoTen" placeholder="Nhập họ tên của bạn" data-i18n-placeholder="placeholder_fullname">
-              </div>
-              <div class="order-card__field order-card__field--underline">
-                <label for="donVi" data-i18n="label_company">Đơn vị</label>
-                <input type="text" id="donVi" name="donVi" placeholder="Nhập tên đơn vị" data-i18n-placeholder="placeholder_company">
-              </div>
-              <div class="order-card__field order-card__field--underline">
-                <label for="email" data-i18n="label_email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Nhập email của bạn" data-i18n-placeholder="placeholder_email">
-              </div>
-              <div class="order-card__field order-card__field--underline">
-                <label for="soLuongDat" data-i18n="label_qty_order">Số lượng</label>
-                <input type="number" id="soLuongDat" name="soLuongDat" placeholder="Nhập số lượng cần đặt" min="1" data-i18n-placeholder="placeholder_qty_order">
-              </div>
+            <div class="order-card__success" id="businessSuccess" hidden>
+              <div class="order-card__success-icon">✓</div>
+              <p class="order-card__success-text" id="businessSuccessText"></p>
             </div>
 
-            <div class="order-card__field order-card__field--underline order-card__field--full">
-              <label for="yeuCau" data-i18n="label_request">Yêu cầu cụ thể</label>
-              <input type="text" id="yeuCau" name="yeuCau" placeholder="Mô tả yêu cầu của bạn" data-i18n-placeholder="placeholder_request">
-            </div>
-
-            <div class="order-card__footer-row">
-              <p class="order-card__note" data-i18n="order_response_note">Phản hồi trong 24 giờ làm việc.</p>
-              <button type="submit" class="btn btn--on-dark" data-i18n="order_btn_submit">Gửi yêu cầu!</button>
-            </div>
           </div>
 
           <img src="Thap-Rua%201.png" alt="" class="order-card__deco order-card__deco--business" aria-hidden="true">
@@ -362,69 +375,120 @@
       <button type="button" class="order-modal__close" id="orderModalClose" aria-label="Đóng">&times;</button>
       <h3 class="order-modal__title" id="orderModalTitle" data-i18n="modal_title">Đặt hàng</h3>
 
-      <form class="order-modal__form" id="orderModalForm">
-        <div class="order-modal__field">
-          <label for="modalHoTen" data-i18n="label_fullname">Họ và tên</label>
-          <input type="text" id="modalHoTen" name="hoTen" placeholder="Nhập họ tên của bạn" data-i18n-placeholder="placeholder_fullname">
-        </div>
+      <form class="order-modal__form" id="orderModalForm" novalidate>
 
-        <div class="order-modal__field">
-          <label for="modalDienThoai" data-i18n="label_phone">Điện thoại</label>
-          <input type="tel" id="modalDienThoai" name="dienThoai" placeholder="Nhập số điện thoại" data-i18n-placeholder="placeholder_phone">
-        </div>
-
-        <div class="order-modal__field">
-          <label for="modalDiaChi" data-i18n="label_address">Địa chỉ</label>
-          <input type="text" id="modalDiaChi" name="diaChi" placeholder="Nhập địa chỉ giao hàng" data-i18n-placeholder="placeholder_address">
-        </div>
-
-        <div class="order-modal__row">
+        <div class="order-modal__fields" id="modalFormFields">
           <div class="order-modal__field">
-            <label for="modalSanPham" data-i18n="label_product">Sản phẩm</label>
-            <select id="modalSanPham" name="sanPham" class="order-modal__select">
-              <option data-i18n="order_retail_heading">Hộp 4 chiếc "Hà Nội Trong Tôi"</option>
-              <option data-i18n="order_price_single_label">Bánh lẻ</option>
-            </select>
+            <label for="modalHoTen" data-i18n="label_fullname">Họ và tên</label>
+            <input type="text" id="modalHoTen" name="hoTen" placeholder="Nhập họ tên của bạn" data-i18n-placeholder="placeholder_fullname" required>
           </div>
+
           <div class="order-modal__field">
-            <label for="modalSoLuong" data-i18n="label_qty_order">Số lượng</label>
-            <input type="number" id="modalSoLuong" name="soLuong" value="1" min="1">
+            <label for="modalDienThoai" data-i18n="label_phone">Điện thoại</label>
+            <input type="tel" id="modalDienThoai" name="dienThoai" placeholder="Nhập số điện thoại" data-i18n-placeholder="placeholder_phone" required>
           </div>
-        </div>
 
-        <div class="order-modal__flavors">
-          <label class="order-modal__flavors-title" data-i18n="label_flavors">Chọn vị bánh yêu thích</label>
-          <div class="order-modal__flavor-grid">
-            <label class="flavor-check">
-              <input type="checkbox" name="vi" value="thap-rua">
-              <span class="flavor-check__box"></span>
-              <span data-i18n="story2_title">Tháp Rùa</span>
-            </label>
-            <label class="flavor-check">
-              <input type="checkbox" name="vi" value="chua-mot-cot">
-              <span class="flavor-check__box"></span>
-              <span data-i18n="story3_title">Chùa Một Cột</span>
-            </label>
-            <label class="flavor-check">
-              <input type="checkbox" name="vi" value="van-mieu">
-              <span class="flavor-check__box"></span>
-              <span data-i18n="story1_title">Văn Miếu - Quốc Tử Giám</span>
-            </label>
-            <label class="flavor-check">
-              <input type="checkbox" name="vi" value="cau-long-bien">
-              <span class="flavor-check__box"></span>
-              <span data-i18n="story4_title">Cầu Long Biên</span>
-            </label>
+          <div class="order-modal__field">
+            <label for="modalDiaChi" data-i18n="label_address">Địa chỉ</label>
+            <input type="text" id="modalDiaChi" name="diaChi" placeholder="Nhập địa chỉ giao hàng" data-i18n-placeholder="placeholder_address" required>
           </div>
+
+          <div class="order-modal__row">
+            <div class="order-modal__field">
+              <label for="modalSanPham" data-i18n="label_product">Sản phẩm</label>
+              <select id="modalSanPham" name="sanPham" class="order-modal__select">
+                <option data-i18n="order_retail_heading">Hộp 4 chiếc "Hà Nội Trong Tôi"</option>
+                <option data-i18n="order_price_single_label">Bánh lẻ</option>
+              </select>
+            </div>
+            <div class="order-modal__field">
+              <label for="modalSoLuong" data-i18n="label_qty_order">Số lượng</label>
+              <input type="number" id="modalSoLuong" name="soLuong" value="1" min="1">
+            </div>
+          </div>
+
+          <div class="order-modal__flavors">
+            <label class="order-modal__flavors-title" data-i18n="label_flavors">Chọn vị bánh yêu thích</label>
+            <div class="order-modal__flavor-grid">
+              <label class="flavor-check">
+                <input type="checkbox" name="vi" value="thap-rua">
+                <span class="flavor-check__box"></span>
+                <span data-i18n="story2_title">Tháp Rùa</span>
+              </label>
+              <label class="flavor-check">
+                <input type="checkbox" name="vi" value="chua-mot-cot">
+                <span class="flavor-check__box"></span>
+                <span data-i18n="story3_title">Chùa Một Cột</span>
+              </label>
+              <label class="flavor-check">
+                <input type="checkbox" name="vi" value="van-mieu">
+                <span class="flavor-check__box"></span>
+                <span data-i18n="story1_title">Văn Miếu - Quốc Tử Giám</span>
+              </label>
+              <label class="flavor-check">
+                <input type="checkbox" name="vi" value="cau-long-bien">
+                <span class="flavor-check__box"></span>
+                <span data-i18n="story4_title">Cầu Long Biên</span>
+              </label>
+            </div>
+            <p class="flavor-warning" id="flavorWarning" hidden></p>
+          </div>
+
+          <div class="order-modal__field">
+            <label for="modalGhiChu" data-i18n="label_notes">Ghi chú</label>
+            <input type="text" id="modalGhiChu" name="ghiChu" placeholder="Ghi chú thêm (nếu có)" data-i18n-placeholder="placeholder_notes">
+          </div>
+
+          <p class="order-modal__note" data-i18n="modal_delivery_note">Giao nội thành Hà Nội trong 1-2 ngày.</p>
+          <button type="submit" class="btn btn--on-dark order-modal__submit" data-i18n="modal_submit">Xác nhận đặt hàng</button>
         </div>
 
-        <div class="order-modal__field">
-          <label for="modalGhiChu" data-i18n="label_notes">Ghi chú</label>
-          <input type="text" id="modalGhiChu" name="ghiChu" placeholder="Ghi chú thêm (nếu có)" data-i18n-placeholder="placeholder_notes">
+        <!-- Kết quả: đặt hàng thành công + chọn ngân hàng thanh toán -->
+        <div class="order-modal__result" id="orderModalResult" hidden>
+          <div class="order-modal__result-icon">✓</div>
+          <h4 class="order-modal__result-title" data-i18n="payment_success_title">Đặt hàng thành công!</h4>
+          <p class="order-modal__result-order"><span data-i18n="payment_order_label">Mã đơn hàng:</span> <strong id="resultOrderId"></strong></p>
+
+          <div class="qr-picker">
+            <div class="qr-picker__tabs" role="tablist">
+              <button type="button" class="qr-picker__tab is-active" data-bank="mb" role="tab">
+                <span data-i18n="bank_mb_tab">Cá nhân</span>
+                <small>MB Bank</small>
+              </button>
+              <button type="button" class="qr-picker__tab" data-bank="vcb" role="tab">
+                <span data-i18n="bank_vcb_tab">Công ty</span>
+                <small>Vietcombank</small>
+              </button>
+            </div>
+
+            <div class="qr-picker__panel">
+              <div class="qr-picker__image-wrap">
+                <img class="qr-picker__image" id="qrImage" src="" alt="Mã QR thanh toán">
+              </div>
+              <dl class="qr-picker__info">
+                <div>
+                  <dt data-i18n="qr_bank_label">Ngân hàng</dt>
+                  <dd id="qrBankName">MB Bank</dd>
+                </div>
+                <div>
+                  <dt data-i18n="qr_account_number_label">Số tài khoản</dt>
+                  <dd id="qrAccountNumber">6619121964</dd>
+                </div>
+                <div>
+                  <dt data-i18n="qr_account_name_label">Chủ tài khoản</dt>
+                  <dd id="qrAccountName">BUI THU HA</dd>
+                </div>
+                <div class="qr-picker__amount">
+                  <dt data-i18n="qr_amount_label">Số tiền</dt>
+                  <dd id="qrAmount">0 đ</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn--outline-cream order-modal__done" id="orderModalDone" data-i18n="btn_close">Đóng</button>
         </div>
 
-        <p class="order-modal__note" data-i18n="modal_delivery_note">Giao nội thành Hà Nội trong 1-2 ngày.</p>
-        <button type="submit" class="btn btn--on-dark order-modal__submit" data-i18n="modal_submit">Xác nhận đặt hàng</button>
       </form>
     </div>
   </div>

@@ -499,12 +499,15 @@ section { position: relative; }
 .products { padding: 90px 0; overflow: hidden; }
 .products__bg {
   position: absolute;
-  top: -80px;
-  right: -140px;
-  width: 480px;
-  max-width: 55%;
-  opacity: 0.1;
-  transform: rotate(8deg);
+  top: 10px;
+  right: -60px;
+  width: 420px;
+  max-width: 50%;
+  height: 640px;
+  object-fit: cover;
+  object-position: bottom;
+  opacity: 0.22;
+  transform: rotate(6deg);
   pointer-events: none;
   z-index: 0;
 }
@@ -937,6 +940,140 @@ section { position: relative; }
 }
 .order-modal__submit { width: 100%; }
 
+.flavor-warning {
+  font-size: 12.5px;
+  color: var(--color-gold-light);
+  margin-top: 10px;
+}
+
+/* ---------- Thông báo thành công (Form Doanh nghiệp) ---------- */
+.order-card__success {
+  text-align: center;
+  padding: 30px 10px;
+}
+.order-card__success-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--color-cream);
+  color: var(--color-maroon-dark);
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.order-card__success-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(251, 242, 227, 0.9);
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ---------- Kết quả đặt hàng + chọn ngân hàng thanh toán (Modal) ---------- */
+.order-modal__result { text-align: center; }
+.order-modal__result-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--color-cream);
+  color: var(--color-maroon-dark);
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.order-modal__result-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.order-modal__result-order {
+  font-size: 14px;
+  color: rgba(251, 242, 227, 0.75);
+  margin-bottom: 28px;
+}
+.order-modal__result-order strong { color: var(--color-gold-light); }
+
+.qr-picker { text-align: left; margin-bottom: 24px; }
+.qr-picker__tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(251, 242, 227, 0.08);
+  border-radius: 999px;
+  padding: 5px;
+  margin-bottom: 20px;
+}
+.qr-picker__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  color: rgba(251, 242, 227, 0.7);
+  font-weight: 700;
+  font-size: 13.5px;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+.qr-picker__tab small {
+  font-weight: 500;
+  font-size: 11px;
+  opacity: 0.8;
+}
+.qr-picker__tab.is-active {
+  background: var(--color-gold);
+  color: var(--color-maroon-dark);
+}
+.qr-picker__tab:not(.is-active):hover { color: var(--color-cream); }
+
+.qr-picker__panel {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: rgba(251, 242, 227, 0.06);
+  border: 1px solid rgba(251, 242, 227, 0.15);
+  border-radius: 18px;
+  padding: 18px;
+}
+.qr-picker__image-wrap {
+  flex-shrink: 0;
+  width: 132px;
+  height: 132px;
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qr-picker__image { width: 100%; height: 100%; object-fit: contain; }
+
+.qr-picker__info { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+.qr-picker__info > div { display: flex; flex-direction: column; gap: 1px; }
+.qr-picker__info dt {
+  font-size: 11.5px;
+  color: rgba(251, 242, 227, 0.55);
+}
+.qr-picker__info dd {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-cream);
+  overflow-wrap: break-word;
+}
+.qr-picker__amount dd {
+  color: var(--color-gold-light);
+  font-size: 17px;
+  font-family: var(--font-heading);
+}
+
+.order-modal__done { width: 100%; }
+
 /* =========================================================
    FOOTER
    ========================================================= */
@@ -1115,6 +1252,9 @@ section { position: relative; }
   .order-modal__title { font-size: 22px; }
   .order-modal__row { grid-template-columns: 1fr; gap: 20px; }
   .order-modal__flavor-grid { grid-template-columns: 1fr; }
+
+  .qr-picker__panel { flex-direction: column; text-align: center; }
+  .qr-picker__info > div { align-items: center; }
 
   .footer__inner { grid-template-columns: 1fr; padding: 50px 0 30px; gap: 30px; }
 }
