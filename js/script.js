@@ -71,6 +71,9 @@ const translations = {
     order_price_badge: "🎁 Mức giá ưu đãi độc quyền đặt hàng trực tuyến trên website (Đã bao gồm VAT)",
     order_btn_box4: "Đặt hộp quà",
     order_btn_single: "Mua Bánh lẻ",
+    chatbot_title: "Trợ lý Vị Di Sản",
+    chatbot_hotline_label: "Cần hỗ trợ nhanh? Gọi",
+    chatbot_placeholder: "Nhập câu hỏi của bạn...",
 
     order_business_title: "Doanh nghiệp - Ngoại giao",
     order_business_product: "Quà tặng số lượng lớn theo yêu cầu",
@@ -199,6 +202,9 @@ const translations = {
     order_price_badge: "🎁 Exclusive online pricing — website orders only (VAT included)",
     order_btn_box4: "Order a Gift Box",
     order_btn_single: "Buy a Single Cake",
+    chatbot_title: "Vị Di Sản Assistant",
+    chatbot_hotline_label: "Need quick help? Call",
+    chatbot_placeholder: "Type your question...",
 
     order_business_title: "Business & Corporate Gifting",
     order_business_product: "Bulk gifts tailored to your needs",
@@ -718,6 +724,91 @@ document.addEventListener("DOMContentLoaded", () => {
         alert(err.message);
       } finally {
         submitBtn.disabled = false;
+      }
+    });
+  }
+
+  /* ---------- CHATBOT TRỢ LÝ ---------- */
+  const CHAT_API_ENDPOINT = "https://vidisanar-api.tranchuyen091289.workers.dev/api/chat";
+  const chatbotEl = document.getElementById("chatbot");
+  const chatbotToggle = document.getElementById("chatbotToggle");
+  const chatbotPanel = document.getElementById("chatbotPanel");
+  const chatbotClose = document.getElementById("chatbotClose");
+  const chatbotMessages = document.getElementById("chatbotMessages");
+  const chatbotForm = document.getElementById("chatbotForm");
+  const chatbotInput = document.getElementById("chatbotInput");
+
+  if (chatbotEl && chatbotToggle && chatbotPanel && chatbotForm && chatbotInput) {
+    let chatHistory = [];
+    let hasGreeted = false;
+    const HOTLINE_FALLBACK_VI = "Xin lỗi, mình chưa hỗ trợ được câu hỏi này. Bạn vui lòng gọi hotline 0915 080 988 để được tư vấn trực tiếp nhé!";
+    const HOTLINE_FALLBACK_EN = "Sorry, I can't help with that yet. Please call our hotline 0915 080 988 for direct support!";
+
+    function addChatBubble(role, text) {
+      const bubble = document.createElement("div");
+      bubble.className = `chatbot__msg chatbot__msg--${role === "user" ? "user" : "bot"}`;
+      bubble.textContent = text;
+      chatbotMessages.appendChild(bubble);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      return bubble;
+    }
+
+    function openChat() {
+      chatbotEl.classList.add("is-open");
+      chatbotPanel.hidden = false;
+      if (!hasGreeted) {
+        hasGreeted = true;
+        addChatBubble(
+          "assistant",
+          currentLang === "en"
+            ? "Hi! I'm the Vị Di Sản assistant. Ask me about our products, pricing, or how to order!"
+            : "Xin chào! Mình là trợ lý Vị Di Sản. Bạn cần hỏi gì về sản phẩm, giá cả hay cách đặt hàng không?"
+        );
+      }
+      chatbotInput.focus();
+    }
+
+    function closeChat() {
+      chatbotEl.classList.remove("is-open");
+      chatbotPanel.hidden = true;
+    }
+
+    chatbotToggle.addEventListener("click", () => {
+      if (chatbotPanel.hidden) openChat();
+      else closeChat();
+    });
+    if (chatbotClose) chatbotClose.addEventListener("click", closeChat);
+
+    chatbotForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = chatbotInput.value.trim();
+      if (!text) return;
+
+      addChatBubble("user", text);
+      chatHistory.push({ role: "user", content: text });
+      chatbotInput.value = "";
+      chatbotInput.disabled = true;
+
+      const loadingBubble = addChatBubble("assistant", currentLang === "en" ? "Typing..." : "Đang trả lời...");
+      loadingBubble.classList.add("chatbot__msg--loading");
+
+      try {
+        const res = await fetch(CHAT_API_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: chatHistory }),
+        });
+        const data = await res.json().catch(() => ({}));
+        loadingBubble.remove();
+        const reply = (data && data.reply) || (currentLang === "en" ? HOTLINE_FALLBACK_EN : HOTLINE_FALLBACK_VI);
+        addChatBubble("assistant", reply);
+        chatHistory.push({ role: "assistant", content: reply });
+      } catch {
+        loadingBubble.remove();
+        addChatBubble("assistant", currentLang === "en" ? HOTLINE_FALLBACK_EN : HOTLINE_FALLBACK_VI);
+      } finally {
+        chatbotInput.disabled = false;
+        chatbotInput.focus();
       }
     });
   }

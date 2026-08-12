@@ -579,6 +579,29 @@
 
 <button class="scroll-top" id="scrollTop" aria-label="Lên đầu trang">↑</button>
 
+<!-- Chatbot trợ lý -->
+<div class="chatbot" id="chatbot">
+  <div class="chatbot__panel" id="chatbotPanel" hidden>
+    <div class="chatbot__header">
+      <div class="chatbot__header-info">
+        <img src="dau-lat-cat-3.png" alt="" class="chatbot__header-icon">
+        <span data-i18n="chatbot_title">Trợ lý Vị Di Sản</span>
+      </div>
+      <button type="button" class="chatbot__close" id="chatbotClose" aria-label="Đóng">&times;</button>
+    </div>
+    <div class="chatbot__messages" id="chatbotMessages"></div>
+    <p class="chatbot__hotline"><span data-i18n="chatbot_hotline_label">Cần hỗ trợ nhanh? Gọi</span> <a href="tel:0915080988">0915 080 988</a></p>
+    <form class="chatbot__form" id="chatbotForm">
+      <input type="text" id="chatbotInput" data-i18n-placeholder="chatbot_placeholder" placeholder="Nhập câu hỏi của bạn..." autocomplete="off">
+      <button type="submit" class="chatbot__send" aria-label="Gửi">➤</button>
+    </form>
+  </div>
+  <button type="button" class="chatbot__toggle" id="chatbotToggle" aria-label="Mở trợ lý chat">
+    <span class="chatbot__toggle-icon-open">💬</span>
+    <span class="chatbot__toggle-icon-close">✕</span>
+  </button>
+</div>
+
 <script src="js/script.js"></script>
 </body>
 </html>
