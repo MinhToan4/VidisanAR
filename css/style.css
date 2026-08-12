@@ -1360,6 +1360,10 @@ section { position: relative; }
   overflow: hidden;
   border: 1px solid rgba(228, 199, 132, 0.25);
 }
+/* .chatbot__panel { display: flex } thắng thế mặc định [hidden]{display:none}
+   của trình duyệt (CSS tác giả luôn thắng CSS mặc định) — phải khai báo lại
+   tường minh thì thuộc tính "hidden" mới thực sự ẩn được panel. */
+.chatbot__panel[hidden] { display: none; }
 
 .chatbot__header {
   display: flex;
