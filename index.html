@@ -65,7 +65,7 @@
     </div>
     <div class="container hero__inner">
       <div class="hero__heading reveal">
-        <h1 class="hero__title" data-i18n="hero_title">HÀ NỘI TRONG TÔI</h1>
+        <h1 class="hero__title" data-i18n="hero_title">VỊ DI SẢN - QUÀ TẶNG VĂN HÓA</h1>
         <p class="hero__subtitle" data-i18n="hero_subtitle_1">Trải nghiệm Hà Nội nghìn năm theo cách chưa từng có</p>
         <p class="hero__subtitle hero__subtitle--script" data-i18n="hero_subtitle_2">Sự kết hợp hoàn hảo giữa Ẩm thực - Văn hóa - Công nghệ - Trải nghiệm</p>
         <a href="#san-pham" class="btn btn--primary hero__cta" data-i18n="hero_cta">Khám phá ngay</a>
@@ -250,7 +250,11 @@
       </div>
 
       <div class="ar-experience__media reveal">
-        <img src="Mockup-Dien-Thoai.png" alt="Trải nghiệm AR trên điện thoại" class="ar-experience__phone">
+        <div class="video-container">
+          <video autoplay muted loop playsinline poster="Mockup-Dien-Thoai.png" class="ar-video" style="width: 100%; height: 100%; object-fit: cover; border-radius: 24px;">
+            <source src="1WUpukiCvT38Qf9kVdSitAcbb1y9nuvxCF1YPntczrUzClnNFZwX0G19Yl35RLmWgvW.mp4" type="video/mp4">
+          </video>
+        </div>
         <img src="Ma-QR.png" alt="Quét mã QR" class="ar-experience__qr">
       </div>
     </div>
@@ -279,19 +283,19 @@
             <ul class="order-card__price-list">
               <li>
                 <span data-i18n="order_price_tinhhoa_label">Hộp Vị Di Sản - Tinh Hoa</span>
-                <strong data-i18n="order_price_tinhhoa_value">862.920 đ / hộp</strong>
+                <strong data-i18n="order_price_tinhhoa_value">799.000 đ / hộp</strong>
               </li>
               <li>
                 <span data-i18n="order_price_tuyenchon_label">Hộp Vị Di Sản - Tuyển Chọn</span>
-                <strong data-i18n="order_price_tuyenchon_value">1.078.920 đ / hộp</strong>
+                <strong data-i18n="order_price_tuyenchon_value">999.000 đ / hộp</strong>
               </li>
               <li>
                 <span data-i18n="order_price_single_label">Bánh lẻ</span>
-                <strong data-i18n="order_price_single_value">171.720 đ / chiếc</strong>
+                <strong data-i18n="order_price_single_value">159.000 đ / chiếc</strong>
               </li>
             </ul>
 
-            <p class="order-card__vat-note" data-i18n="order_vat_note">Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.</p>
+            <p class="order-card__vat-note" data-i18n="order_vat_note">* Giá chưa bao gồm 8% VAT (sẽ được cộng vào tổng thanh toán khi tạo đơn).</p>
 
             <div class="order-card__actions">
               <button type="submit" id="btnOrderBox4" class="btn btn--on-dark" data-i18n="order_btn_box4">Đặt hộp quà</button>
@@ -393,6 +397,11 @@
           </div>
 
           <div class="order-modal__field">
+            <label for="modalEmail" data-i18n="label_email">Email</label>
+            <input type="email" id="modalEmail" name="email" placeholder="Nhập email của bạn" data-i18n-placeholder="placeholder_email" required>
+          </div>
+
+          <div class="order-modal__field">
             <label for="modalDiaChi" data-i18n="label_address">Địa chỉ</label>
             <input type="text" id="modalDiaChi" name="diaChi" placeholder="Nhập địa chỉ giao hàng" data-i18n-placeholder="placeholder_address" required>
           </div>
@@ -412,7 +421,7 @@
             </div>
           </div>
 
-          <div class="order-modal__flavors">
+          <div class="order-modal__flavors" id="modalFlavorsSection">
             <label class="order-modal__flavors-title" data-i18n="label_flavors">Nhập số lượng theo vị bánh</label>
             <div class="order-modal__flavor-grid">
               <div class="flavor-qty">
@@ -439,7 +448,7 @@
             <span data-i18n="label_total">Tổng tiền</span>
             <strong id="modalTotalAmount">0 đ</strong>
           </div>
-          <p class="order-modal__vat-note" data-i18n="order_vat_note">Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.</p>
+          <p class="order-modal__vat-note" data-i18n="order_vat_note">* Giá chưa bao gồm 8% VAT (sẽ được cộng vào tổng thanh toán khi tạo đơn).</p>
 
           <div class="order-modal__field">
             <label for="modalGhiChu" data-i18n="label_notes">Ghi chú</label>

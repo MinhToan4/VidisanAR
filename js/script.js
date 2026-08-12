@@ -11,7 +11,7 @@ const translations = {
     nav_order: "Đặt hộp quà",
     nav_business: "Doanh nghiệp",
 
-    hero_title: "HÀ NỘI TRONG TÔI",
+    hero_title: "VỊ DI SẢN - QUÀ TẶNG VĂN HÓA",
     hero_subtitle_1: "Trải nghiệm Hà Nội nghìn năm theo cách chưa từng có",
     hero_subtitle_2: "Sự kết hợp hoàn hảo giữa Ẩm thực - Văn hóa - Công nghệ - Trải nghiệm",
     hero_cta: "Khám phá ngay",
@@ -60,12 +60,12 @@ const translations = {
     order_retail_heading: "Hộp 4 chiếc \"Hà Nội Trong Tôi\"",
     order_retail_desc: "Bốn chiếc bánh trung thu nghệ thuật, tạo hình thủ công tại Hà Nội, đặt trong hộp gỗ sơn mài kèm thiệp giấy dó và bộ đế kể chuyện song ngữ Việt - Anh.",
     order_price_tinhhoa_label: "Hộp Vị Di Sản - Tinh Hoa",
-    order_price_tinhhoa_value: "862.920 đ / hộp",
+    order_price_tinhhoa_value: "799.000 đ / hộp",
     order_price_tuyenchon_label: "Hộp Vị Di Sản - Tuyển Chọn",
-    order_price_tuyenchon_value: "1.078.920 đ / hộp",
+    order_price_tuyenchon_value: "999.000 đ / hộp",
     order_price_single_label: "Bánh lẻ",
-    order_price_single_value: "171.720 đ / chiếc",
-    order_vat_note: "Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.",
+    order_price_single_value: "159.000 đ / chiếc",
+    order_vat_note: "* Giá chưa bao gồm 8% VAT (sẽ được cộng vào tổng thanh toán khi tạo đơn).",
     order_btn_box4: "Đặt hộp quà",
     order_btn_single: "Mua Bánh lẻ",
 
@@ -136,7 +136,7 @@ const translations = {
     nav_order: "Order a Gift Box",
     nav_business: "Business",
 
-    hero_title: "HANOI IN MY HEART",
+    hero_title: "VỊ DI SẢN - CULTURAL GIFT",
     hero_subtitle_1: "Experience a thousand years of Hanoi like never before",
     hero_subtitle_2: "A perfect blend of Gastronomy - Culture - Technology - Experience",
     hero_cta: "Explore Now",
@@ -185,12 +185,12 @@ const translations = {
     order_retail_heading: "Set of 4 \"Hanoi In My Heart\" Cakes",
     order_retail_desc: "Four artisan mooncakes handcrafted in Hanoi, presented in a lacquered wooden box with a dó-paper card and a bilingual Vietnamese-English storytelling stand.",
     order_price_tinhhoa_label: "Vị Di Sản Box - Tinh Hoa",
-    order_price_tinhhoa_value: "862,920 VND / box",
+    order_price_tinhhoa_value: "799,000 VND / box",
     order_price_tuyenchon_label: "Vị Di Sản Box - Tuyển Chọn",
-    order_price_tuyenchon_value: "1,078,920 VND / box",
+    order_price_tuyenchon_value: "999,000 VND / box",
     order_price_single_label: "Single Cake",
-    order_price_single_value: "171,720 VND / cake",
-    order_vat_note: "Listed prices already include 8% VAT. Please transfer the exact amount shown.",
+    order_price_single_value: "159,000 VND / cake",
+    order_vat_note: "* Prices shown exclude 8% VAT (added to the total at checkout).",
     order_btn_box4: "Order a Gift Box",
     order_btn_single: "Buy a Single Cake",
 
@@ -257,14 +257,20 @@ const translations = {
 
 let currentLang = "vi";
 
-/* ---------- BẢNG GIÁ SẢN PHẨM (đã gồm 8% VAT) ----------
+/* ---------- BẢNG GIÁ SẢN PHẨM (giá GỐC, CHƯA gồm 8% VAT) ----------
    Khoá phải khớp CHÍNH XÁC với value của các <option> trong #modalSanPham
-   và với PRICE_TABLE trong worker.js — nếu đổi tên sản phẩm, đổi cả 3 chỗ. */
+   và với PRICE_TABLE trong worker.js — nếu đổi tên sản phẩm, đổi cả 3 chỗ.
+   8% VAT được cộng thêm khi tính "Tổng tiền" (xem calculateTotalWithVat). */
 const PRICE_TABLE = {
-  "Hộp Vị Di Sản - Tinh Hoa": 862920,
-  "Hộp Vị Di Sản - Tuyển Chọn": 1078920,
-  "Bánh lẻ": 171720,
+  "Hộp Vị Di Sản - Tinh Hoa": 799000,
+  "Hộp Vị Di Sản - Tuyển Chọn": 999000,
+  "Bánh lẻ": 159000,
 };
+const VAT_RATE = 0.08;
+
+function calculateTotalWithVat(unitPrice, qty) {
+  return Math.round(unitPrice * qty * (1 + VAT_RATE));
+}
 
 function applyTranslations(lang) {
   const dict = translations[lang];
@@ -406,6 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
     orderModalOverlay.classList.add("is-active");
     orderModalOverlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    updateFlavorSectionVisibility();
     updateModalQuantityAndTotal();
   }
 
@@ -421,6 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
         orderModalResult.hidden = true;
         modalFormFields.hidden = false;
         orderModalFormEl.reset();
+        updateFlavorSectionVisibility();
         updateModalQuantityAndTotal();
       }
     }, 350);
@@ -459,6 +467,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const flavorQtyInputs = Array.from(document.querySelectorAll("#orderModalForm .flavor-qty__input"));
   const flavorWarning = document.getElementById("flavorWarning");
   const modalTotalAmount = document.getElementById("modalTotalAmount");
+  const modalFlavorsSection = document.getElementById("modalFlavorsSection");
+
+  // Hộp nguyên bản (Tinh Hoa / Tuyển Chọn) đã có sẵn bộ vị tiêu chuẩn —
+  // chỉ "Bánh lẻ" mới cho khách tự phân bổ số lượng theo từng vị.
+  function isBanhLeSelected() {
+    return orderModalSelect && orderModalSelect.value === "Bánh lẻ";
+  }
+
+  function updateFlavorSectionVisibility() {
+    if (!modalFlavorsSection) return;
+    const show = isBanhLeSelected();
+    modalFlavorsSection.hidden = !show;
+    if (!show) {
+      flavorQtyInputs.forEach((input) => { input.value = 0; });
+      if (flavorWarning) flavorWarning.hidden = true;
+    }
+  }
 
   function getTotalFlavorQty() {
     return flavorQtyInputs.reduce((sum, input) => sum + (Math.max(0, parseInt(input.value, 10) || 0)), 0);
@@ -467,9 +492,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateModalQuantityAndTotal() {
     const qty = Math.max(1, parseInt(modalQtyInput.value, 10) || 0);
     const unitPrice = PRICE_TABLE[orderModalSelect.value] || 0;
-    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(unitPrice * qty);
+    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(calculateTotalWithVat(unitPrice, qty));
 
-    if (flavorWarning) {
+    if (flavorWarning && isBanhLeSelected()) {
       const flavorTotal = getTotalFlavorQty();
       const overLimit = flavorTotal > qty;
       flavorWarning.hidden = !overLimit;
@@ -490,7 +515,13 @@ document.addEventListener("DOMContentLoaded", () => {
         updateModalQuantityAndTotal();
       });
     });
-    if (orderModalSelect) orderModalSelect.addEventListener("change", updateModalQuantityAndTotal);
+    if (orderModalSelect) {
+      orderModalSelect.addEventListener("change", () => {
+        updateFlavorSectionVisibility();
+        updateModalQuantityAndTotal();
+      });
+    }
+    updateFlavorSectionVisibility();
     updateModalQuantityAndTotal();
   }
 
@@ -619,6 +650,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loaiKhachHang: "khach_le",
         hoTen: orderModalFormEl.hoTen.value.trim(),
         soDienThoai: orderModalFormEl.dienThoai.value.trim(),
+        email: orderModalFormEl.email.value.trim(),
         diaChi: orderModalFormEl.diaChi.value.trim(),
         sanPham: orderModalSelect.value,
         soLuong: modalQtyInput.value,
@@ -627,8 +659,8 @@ document.addEventListener("DOMContentLoaded", () => {
         affiliateCode: getAffiliateCode(),
       };
 
-      if (!payload.hoTen || !payload.soDienThoai || !payload.diaChi) {
-        alert("Vui lòng nhập đủ Họ tên, Điện thoại và Địa chỉ giao hàng.");
+      if (!payload.hoTen || !payload.soDienThoai || !payload.email || !payload.diaChi) {
+        alert("Vui lòng nhập đủ Họ tên, Điện thoại, Email và Địa chỉ giao hàng.");
         return;
       }
 

@@ -591,6 +591,16 @@ section { position: relative; }
   transition: transform var(--transition-base);
 }
 .ar-experience__phone:hover { transform: translateY(-10px) rotate(-1deg); }
+.video-container {
+  width: 340px;
+  aspect-ratio: 9 / 16;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--color-maroon, #5a1f1f);
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.35));
+  transition: transform var(--transition-base);
+}
+.video-container:hover { transform: translateY(-10px) rotate(-1deg); }
 .ar-experience__qr {
   position: absolute;
   bottom: 10%;
@@ -1239,6 +1249,7 @@ section { position: relative; }
 
   .ar-experience { padding: 70px 0; }
   .ar-experience__phone { width: 240px; }
+  .video-container { width: 240px; }
   .ar-experience__qr { width: 90px; }
 
   .order-card { padding: 26px; }
