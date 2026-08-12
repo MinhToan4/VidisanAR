@@ -449,10 +449,12 @@ document.addEventListener("DOMContentLoaded", () => {
     orderModalDoneBtn.addEventListener("click", closeOrderModal);
   }
 
-  /* ---------- 9. NHẬP SỐ LƯỢNG THEO TỪNG VỊ BÁNH (Modal) ----------
-     "Số lượng" tổng KHÔNG cho gõ tay nữa — tự động cộng dồn từ 4 ô số
-     lượng theo vị bánh bên dưới, và "Tổng tiền" tự tính theo Sản phẩm
-     đang chọn * tổng số lượng đó. */
+  /* ---------- 9. SỐ LƯỢNG + PHÂN BỔ VỊ BÁNH (Modal) ----------
+     "Số lượng" được gõ tay tự do (để mua nhiều hộp/nhiều bánh cùng lúc) và
+     là số quyết định "Tổng tiền" = Số lượng * đơn giá Sản phẩm đang chọn.
+     4 ô vị bánh bên dưới chỉ là phân bổ THAM KHẢO (không bắt buộc, không
+     drive Số lượng) — nếu tổng phân bổ vượt quá Số lượng thì chỉ cảnh báo,
+     không chặn gửi đơn. */
   const modalQtyInput = document.getElementById("modalSoLuong");
   const flavorQtyInputs = Array.from(document.querySelectorAll("#orderModalForm .flavor-qty__input"));
   const flavorWarning = document.getElementById("flavorWarning");
@@ -463,20 +465,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateModalQuantityAndTotal() {
-    const totalQty = getTotalFlavorQty();
-    if (modalQtyInput) modalQtyInput.value = totalQty;
-
+    const qty = Math.max(1, parseInt(modalQtyInput.value, 10) || 0);
     const unitPrice = PRICE_TABLE[orderModalSelect.value] || 0;
-    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(unitPrice * totalQty);
+    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(unitPrice * qty);
 
     if (flavorWarning) {
-      const hasQty = totalQty > 0;
-      flavorWarning.hidden = hasQty;
-      if (!hasQty) flavorWarning.textContent = "Vui lòng nhập số lượng cho ít nhất một vị bánh.";
+      const flavorTotal = getTotalFlavorQty();
+      const overLimit = flavorTotal > qty;
+      flavorWarning.hidden = !overLimit;
+      if (overLimit) {
+        flavorWarning.textContent = `Tổng số lượng theo vị (${flavorTotal}) đang vượt quá Số lượng (${qty}) bạn đã nhập.`;
+      }
     }
   }
 
-  if (flavorQtyInputs.length > 0) {
+  if (modalQtyInput) {
+    modalQtyInput.addEventListener("input", () => {
+      if (modalQtyInput.value !== "" && parseInt(modalQtyInput.value, 10) < 1) modalQtyInput.value = 1;
+      updateModalQuantityAndTotal();
+    });
     flavorQtyInputs.forEach((input) => {
       input.addEventListener("input", () => {
         if (input.value !== "" && parseInt(input.value, 10) < 0) input.value = 0;
@@ -514,13 +521,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return `https://img.vietqr.io/image/${VCB_BANK.code}-${VCB_BANK.account}-compact2.png?${params.toString()}`;
   }
 
-  // Trả về chuỗi mô tả dạng "Tháp Rùa: 2, Chùa Một Cột: 2" — chỉ liệt kê
-  // những vị có số lượng > 0, để ghi thẳng vào cột "Vị bánh" (kiểu Text) ở Lark Base.
-  function collectFlavors() {
-    return flavorQtyInputs
-      .filter((input) => (parseInt(input.value, 10) || 0) > 0)
-      .map((input) => `${input.dataset.flavor}: ${parseInt(input.value, 10)}`)
-      .join(", ");
+  // Trả về { thapRua, chuaMotCot, vanMieu, cauLongBien } — mỗi vị bánh giờ
+  // là một cột số riêng trong Lark Base, nên gửi thẳng 4 field rời thay vì
+  // gộp thành một chuỗi.
+  function collectFlavorQuantities() {
+    const result = {};
+    flavorQtyInputs.forEach((input) => {
+      result[input.dataset.field] = parseInt(input.value, 10) || 0;
+    });
+    return result;
   }
 
   // Gửi đơn hàng lên backend, trả về { order_id, total_amount, ... } khi thành công.
@@ -613,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
         diaChi: orderModalFormEl.diaChi.value.trim(),
         sanPham: orderModalSelect.value,
         soLuong: modalQtyInput.value,
-        viBanh: collectFlavors(),
+        ...collectFlavorQuantities(),
         ghiChu: orderModalFormEl.ghiChu.value.trim(),
         affiliateCode: getAffiliateCode(),
       };
@@ -623,8 +632,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (getTotalFlavorQty() <= 0) {
-        alert("Vui lòng nhập số lượng cho ít nhất một vị bánh.");
+      if (!payload.soLuong || parseInt(payload.soLuong, 10) < 1) {
+        alert("Vui lòng nhập Số lượng hợp lệ (tối thiểu 1).");
         return;
       }
 
