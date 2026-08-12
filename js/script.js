@@ -532,10 +532,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // Chỉ còn duy nhất Vietcombank (đã bỏ tuỳ chọn MB Bank).
   const VCB_BANK = { code: "VCB", account: "0451000402887", accountName: "CONG TY TNHH NUONG BAC" };
 
-  // Đọc mã Affiliate từ URL, ví dụ ?ref=ABC123 — không có thì để rỗng.
+  // Đọc mã Affiliate từ URL (?ref=ABC123) và nhớ lại trong 30 ngày qua
+  // localStorage — khách bấm link giới thiệu, tắt tab, vài hôm sau quay lại
+  // đặt hàng (không còn ?ref= trên URL) thì vẫn tính đúng người giới thiệu.
+  const AFFILIATE_REF_STORAGE_KEY = "vds_affiliate_ref";
+  const AFFILIATE_REF_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 ngày
+
   function getAffiliateCode() {
     const params = new URLSearchParams(window.location.search);
-    return params.get("ref") || "";
+    const refFromUrl = params.get("ref");
+
+    if (refFromUrl) {
+      try {
+        localStorage.setItem(
+          AFFILIATE_REF_STORAGE_KEY,
+          JSON.stringify({ code: refFromUrl, savedAt: Date.now() })
+        );
+      } catch {
+        // localStorage có thể bị chặn (VD chế độ duyệt web riêng tư) — bỏ
+        // qua, vẫn dùng thẳng mã đọc được từ URL cho lần đặt hàng này.
+      }
+      return refFromUrl;
+    }
+
+    try {
+      const raw = localStorage.getItem(AFFILIATE_REF_STORAGE_KEY);
+      if (!raw) return "";
+      const { code, savedAt } = JSON.parse(raw);
+      if (!code || !savedAt || Date.now() - savedAt > AFFILIATE_REF_TTL_MS) {
+        localStorage.removeItem(AFFILIATE_REF_STORAGE_KEY);
+        return "";
+      }
+      return code;
+    } catch {
+      return "";
+    }
   }
 
   function formatVnd(amount) {
