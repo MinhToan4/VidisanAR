@@ -779,6 +779,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (chatbotClose) chatbotClose.addEventListener("click", closeChat);
 
+    // Bấm ra ngoài khung chat (trên nền trang) cũng tự đóng lại, để khách
+    // dễ đọc nội dung khác trên trang mà không cần bấm đúng nút X nhỏ.
+    document.addEventListener("click", (e) => {
+      if (!chatbotPanel.hidden && !chatbotEl.contains(e.target)) closeChat();
+    });
+    // Phím Esc cũng đóng — tiện cho khách dùng bàn phím.
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !chatbotPanel.hidden) closeChat();
+    });
+
     chatbotForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const text = chatbotInput.value.trim();
