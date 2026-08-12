@@ -60,12 +60,15 @@ const translations = {
     order_retail_heading: "Hộp 4 chiếc \"Hà Nội Trong Tôi\"",
     order_retail_desc: "Bốn chiếc bánh trung thu nghệ thuật, tạo hình thủ công tại Hà Nội, đặt trong hộp gỗ sơn mài kèm thiệp giấy dó và bộ đế kể chuyện song ngữ Việt - Anh.",
     order_price_tinhhoa_label: "Hộp Vị Di Sản - Tinh Hoa",
+    order_price_tinhhoa_old: "863.000 đ",
     order_price_tinhhoa_value: "799.000 đ / hộp",
     order_price_tuyenchon_label: "Hộp Vị Di Sản - Tuyển Chọn",
+    order_price_tuyenchon_old: "1.079.000 đ",
     order_price_tuyenchon_value: "999.000 đ / hộp",
     order_price_single_label: "Bánh lẻ",
+    order_price_single_old: "172.000 đ",
     order_price_single_value: "159.000 đ / chiếc",
-    order_vat_note: "* Giá chưa bao gồm 8% VAT (sẽ được cộng vào tổng thanh toán khi tạo đơn).",
+    order_price_badge: "🎁 Mức giá ưu đãi độc quyền đặt hàng trực tuyến trên website (Đã bao gồm VAT)",
     order_btn_box4: "Đặt hộp quà",
     order_btn_single: "Mua Bánh lẻ",
 
@@ -185,12 +188,15 @@ const translations = {
     order_retail_heading: "Set of 4 \"Hanoi In My Heart\" Cakes",
     order_retail_desc: "Four artisan mooncakes handcrafted in Hanoi, presented in a lacquered wooden box with a dó-paper card and a bilingual Vietnamese-English storytelling stand.",
     order_price_tinhhoa_label: "Vị Di Sản Box - Tinh Hoa",
+    order_price_tinhhoa_old: "863,000 VND",
     order_price_tinhhoa_value: "799,000 VND / box",
     order_price_tuyenchon_label: "Vị Di Sản Box - Tuyển Chọn",
+    order_price_tuyenchon_old: "1,079,000 VND",
     order_price_tuyenchon_value: "999,000 VND / box",
     order_price_single_label: "Single Cake",
+    order_price_single_old: "172,000 VND",
     order_price_single_value: "159,000 VND / cake",
-    order_vat_note: "* Prices shown exclude 8% VAT (added to the total at checkout).",
+    order_price_badge: "🎁 Exclusive online pricing — website orders only (VAT included)",
     order_btn_box4: "Order a Gift Box",
     order_btn_single: "Buy a Single Cake",
 
@@ -257,19 +263,19 @@ const translations = {
 
 let currentLang = "vi";
 
-/* ---------- BẢNG GIÁ SẢN PHẨM (giá GỐC, CHƯA gồm 8% VAT) ----------
+/* ---------- BẢNG GIÁ SẢN PHẨM (giá niêm yết, ĐÃ GỒM VAT) ----------
    Khoá phải khớp CHÍNH XÁC với value của các <option> trong #modalSanPham
    và với PRICE_TABLE trong worker.js — nếu đổi tên sản phẩm, đổi cả 3 chỗ.
-   8% VAT được cộng thêm khi tính "Tổng tiền" (xem calculateTotalWithVat). */
+   Giá đã bao gồm VAT nên "Tổng tiền" = Giá x Số lượng, KHÔNG cộng thêm gì
+   nữa (xem calculateTotal). */
 const PRICE_TABLE = {
   "Hộp Vị Di Sản - Tinh Hoa": 799000,
   "Hộp Vị Di Sản - Tuyển Chọn": 999000,
   "Bánh lẻ": 159000,
 };
-const VAT_RATE = 0.08;
 
-function calculateTotalWithVat(unitPrice, qty) {
-  return Math.round(unitPrice * qty * (1 + VAT_RATE));
+function calculateTotal(unitPrice, qty) {
+  return unitPrice * qty;
 }
 
 function applyTranslations(lang) {
@@ -492,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateModalQuantityAndTotal() {
     const qty = Math.max(1, parseInt(modalQtyInput.value, 10) || 0);
     const unitPrice = PRICE_TABLE[orderModalSelect.value] || 0;
-    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(calculateTotalWithVat(unitPrice, qty));
+    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(calculateTotal(unitPrice, qty));
 
     if (flavorWarning && isBanhLeSelected()) {
       const flavorTotal = getTotalFlavorQty();
@@ -532,10 +538,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // Chỉ còn duy nhất Vietcombank (đã bỏ tuỳ chọn MB Bank).
   const VCB_BANK = { code: "VCB", account: "0451000402887", accountName: "CONG TY TNHH NUONG BAC" };
 
-  // Đọc mã Affiliate từ URL, ví dụ ?ref=ABC123 — không có thì để rỗng.
+  // Đọc mã Affiliate từ URL (?ref=ABC123) và nhớ lại trong 30 ngày qua
+  // localStorage — khách bấm link giới thiệu, tắt tab, vài hôm sau quay lại
+  // đặt hàng (không còn ?ref= trên URL) thì vẫn tính đúng người giới thiệu.
+  const AFFILIATE_REF_STORAGE_KEY = "vds_affiliate_ref";
+  const AFFILIATE_REF_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 ngày
+
   function getAffiliateCode() {
     const params = new URLSearchParams(window.location.search);
-    return params.get("ref") || "";
+    const refFromUrl = params.get("ref");
+
+    if (refFromUrl) {
+      try {
+        localStorage.setItem(
+          AFFILIATE_REF_STORAGE_KEY,
+          JSON.stringify({ code: refFromUrl, savedAt: Date.now() })
+        );
+      } catch {
+        // localStorage có thể bị chặn (VD chế độ duyệt web riêng tư) — bỏ
+        // qua, vẫn dùng thẳng mã đọc được từ URL cho lần đặt hàng này.
+      }
+      return refFromUrl;
+    }
+
+    try {
+      const raw = localStorage.getItem(AFFILIATE_REF_STORAGE_KEY);
+      if (!raw) return "";
+      const { code, savedAt } = JSON.parse(raw);
+      if (!code || !savedAt || Date.now() - savedAt > AFFILIATE_REF_TTL_MS) {
+        localStorage.removeItem(AFFILIATE_REF_STORAGE_KEY);
+        return "";
+      }
+      return code;
+    } catch {
+      return "";
+    }
   }
 
   function formatVnd(amount) {

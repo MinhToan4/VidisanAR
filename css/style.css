@@ -705,6 +705,31 @@ section { position: relative; }
   font-weight: 700;
   color: var(--color-gold-light);
 }
+.order-card__price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.order-card__price-old {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(251, 242, 227, 0.45);
+  text-decoration: line-through;
+}
+
+.order-card__price-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-maroon-dark);
+  background: var(--color-gold-light);
+  padding: 7px 14px;
+  border-radius: 999px;
+  margin: -8px 0 22px;
+}
 
 .order-card__badge {
   display: inline-block;
@@ -715,13 +740,6 @@ section { position: relative; }
   padding: 8px 16px;
   border-radius: 999px;
   margin-bottom: 26px;
-}
-
-.order-card__vat-note {
-  font-size: 12px;
-  font-style: italic;
-  color: rgba(251, 242, 227, 0.55);
-  margin: -8px 0 22px;
 }
 
 .order-card__actions { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -956,10 +974,17 @@ section { position: relative; }
   color: var(--color-gold-light);
 }
 
-.order-modal__vat-note {
+.order-modal__price-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  font-style: italic;
-  color: rgba(251, 242, 227, 0.55);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-maroon-dark);
+  background: var(--color-gold-light);
+  padding: 7px 14px;
+  border-radius: 999px;
   margin-bottom: 20px;
 }
 
