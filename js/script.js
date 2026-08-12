@@ -59,12 +59,14 @@ const translations = {
     order_retail_title: "Khách lẻ",
     order_retail_heading: "Hộp 4 chiếc \"Hà Nội Trong Tôi\"",
     order_retail_desc: "Bốn chiếc bánh trung thu nghệ thuật, tạo hình thủ công tại Hà Nội, đặt trong hộp gỗ sơn mài kèm thiệp giấy dó và bộ đế kể chuyện song ngữ Việt - Anh.",
+    order_price_tinhhoa_label: "Hộp Vị Di Sản - Tinh Hoa",
+    order_price_tinhhoa_value: "862.920 đ / hộp",
+    order_price_tuyenchon_label: "Hộp Vị Di Sản - Tuyển Chọn",
+    order_price_tuyenchon_value: "1.078.920 đ / hộp",
     order_price_single_label: "Bánh lẻ",
-    order_price_single_value: "159.000 đ / chiếc",
-    order_price_box_label: "Hộp 4 biểu tượng",
-    order_price_box_value: "599.000 đ / hộp",
-    order_save_badge: "Tiết kiệm 37.000 đ · save vs. 4 cakes lẻ",
-    order_btn_box4: "Đặt hộp 4 chiếc",
+    order_price_single_value: "171.720 đ / chiếc",
+    order_vat_note: "Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.",
+    order_btn_box4: "Đặt hộp quà",
     order_btn_single: "Mua Bánh lẻ",
 
     order_business_title: "Doanh nghiệp - Ngoại giao",
@@ -82,6 +84,7 @@ const translations = {
     placeholder_email: "Nhập email của bạn",
     label_qty_order: "Số lượng",
     placeholder_qty_order: "Nhập số lượng cần đặt",
+    label_total: "Tổng tiền",
     label_request: "Yêu cầu cụ thể",
     placeholder_request: "Mô tả yêu cầu của bạn",
     order_response_note: "Phản hồi trong 24 giờ làm việc.",
@@ -102,8 +105,7 @@ const translations = {
 
     payment_success_title: "Đặt hàng thành công!",
     payment_order_label: "Mã đơn hàng:",
-    bank_mb_tab: "Cá nhân",
-    bank_vcb_tab: "Công ty",
+    qr_order_warning: "Vui lòng copy / ghi đúng mã đơn hàng (VD: VDS...) vào nội dung chuyển khoản để hệ thống xác nhận tự động.",
     qr_bank_label: "Ngân hàng",
     qr_account_number_label: "Số tài khoản",
     qr_account_name_label: "Chủ tài khoản",
@@ -182,12 +184,14 @@ const translations = {
     order_retail_title: "Individual Customers",
     order_retail_heading: "Set of 4 \"Hanoi In My Heart\" Cakes",
     order_retail_desc: "Four artisan mooncakes handcrafted in Hanoi, presented in a lacquered wooden box with a dó-paper card and a bilingual Vietnamese-English storytelling stand.",
+    order_price_tinhhoa_label: "Vị Di Sản Box - Tinh Hoa",
+    order_price_tinhhoa_value: "862,920 VND / box",
+    order_price_tuyenchon_label: "Vị Di Sản Box - Tuyển Chọn",
+    order_price_tuyenchon_value: "1,078,920 VND / box",
     order_price_single_label: "Single Cake",
-    order_price_single_value: "159,000 VND / cake",
-    order_price_box_label: "Box of 4 Symbols",
-    order_price_box_value: "599,000 VND / box",
-    order_save_badge: "Save 37,000 VND vs. 4 single cakes",
-    order_btn_box4: "Order the Set of 4",
+    order_price_single_value: "171,720 VND / cake",
+    order_vat_note: "Listed prices already include 8% VAT. Please transfer the exact amount shown.",
+    order_btn_box4: "Order a Gift Box",
     order_btn_single: "Buy a Single Cake",
 
     order_business_title: "Business & Corporate Gifting",
@@ -205,6 +209,7 @@ const translations = {
     placeholder_email: "Enter your email",
     label_qty_order: "Quantity",
     placeholder_qty_order: "Enter the quantity needed",
+    label_total: "Total",
     label_request: "Specific Request",
     placeholder_request: "Describe what you need",
     order_response_note: "We respond within 24 business hours.",
@@ -225,8 +230,7 @@ const translations = {
 
     payment_success_title: "Order placed successfully!",
     payment_order_label: "Order code:",
-    bank_mb_tab: "Individual",
-    bank_vcb_tab: "Company",
+    qr_order_warning: "Please copy / write the exact order code (e.g. VDS...) in the transfer note so our system can confirm payment automatically.",
     qr_bank_label: "Bank",
     qr_account_number_label: "Account Number",
     qr_account_name_label: "Account Holder",
@@ -252,6 +256,15 @@ const translations = {
 };
 
 let currentLang = "vi";
+
+/* ---------- BẢNG GIÁ SẢN PHẨM (đã gồm 8% VAT) ----------
+   Khoá phải khớp CHÍNH XÁC với value của các <option> trong #modalSanPham
+   và với PRICE_TABLE trong worker.js — nếu đổi tên sản phẩm, đổi cả 3 chỗ. */
+const PRICE_TABLE = {
+  "Hộp Vị Di Sản - Tinh Hoa": 862920,
+  "Hộp Vị Di Sản - Tuyển Chọn": 1078920,
+  "Bánh lẻ": 171720,
+};
 
 function applyTranslations(lang) {
   const dict = translations[lang];
@@ -393,6 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
     orderModalOverlay.classList.add("is-active");
     orderModalOverlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    updateModalQuantityAndTotal();
   }
 
   function closeOrderModal() {
@@ -407,14 +421,14 @@ document.addEventListener("DOMContentLoaded", () => {
         orderModalResult.hidden = true;
         modalFormFields.hidden = false;
         orderModalFormEl.reset();
-        enforceFlavorLimit();
+        updateModalQuantityAndTotal();
       }
     }, 350);
   }
 
   if (orderModalOverlay && btnOrderBox4 && btnOrderSingle && orderModalClose) {
     btnOrderBox4.addEventListener("click", () => openOrderModal(0));
-    btnOrderSingle.addEventListener("click", () => openOrderModal(1));
+    btnOrderSingle.addEventListener("click", () => openOrderModal(2));
 
     orderModalClose.addEventListener("click", closeOrderModal);
 
@@ -435,54 +449,50 @@ document.addEventListener("DOMContentLoaded", () => {
     orderModalDoneBtn.addEventListener("click", closeOrderModal);
   }
 
-  /* ---------- 9. GIỚI HẠN SỐ VỊ BÁNH THEO SỐ LƯỢNG ĐÃ NHẬP (Modal) ----------
-     Số ô checkbox được tick không được vượt quá giá trị "Số lượng":
-     khi đã chạm giới hạn, các ô chưa tick sẽ tự khoá lại (disabled) và
-     hiện dòng cảnh báo giải thích vì sao không chọn thêm được nữa. */
+  /* ---------- 9. NHẬP SỐ LƯỢNG THEO TỪNG VỊ BÁNH (Modal) ----------
+     "Số lượng" tổng KHÔNG cho gõ tay nữa — tự động cộng dồn từ 4 ô số
+     lượng theo vị bánh bên dưới, và "Tổng tiền" tự tính theo Sản phẩm
+     đang chọn * tổng số lượng đó. */
   const modalQtyInput = document.getElementById("modalSoLuong");
-  const flavorCheckboxes = Array.from(document.querySelectorAll('#orderModalForm input[name="vi"]'));
+  const flavorQtyInputs = Array.from(document.querySelectorAll("#orderModalForm .flavor-qty__input"));
   const flavorWarning = document.getElementById("flavorWarning");
+  const modalTotalAmount = document.getElementById("modalTotalAmount");
 
-  function enforceFlavorLimit() {
-    if (!modalQtyInput || flavorCheckboxes.length === 0) return;
-    const limit = Math.max(1, parseInt(modalQtyInput.value, 10) || 1);
-    let checked = flavorCheckboxes.filter((cb) => cb.checked);
-
-    // Nếu người dùng giảm Số lượng xuống thấp hơn số vị đã chọn trước đó,
-    // tự bỏ tick bớt các lựa chọn dư ra (tính từ lựa chọn cuối cùng).
-    if (checked.length > limit) {
-      checked.slice(limit).forEach((cb) => { cb.checked = false; });
-      checked = checked.slice(0, limit);
-    }
-
-    const atLimit = checked.length >= limit && limit < flavorCheckboxes.length;
-    if (flavorWarning) {
-      flavorWarning.hidden = !atLimit;
-      if (atLimit) {
-        flavorWarning.textContent = `Bạn chỉ được chọn tối đa ${limit} vị, tương ứng với số lượng đã nhập.`;
-      }
-    }
-
-    flavorCheckboxes.forEach((cb) => {
-      cb.disabled = !cb.checked && checked.length >= limit;
-    });
+  function getTotalFlavorQty() {
+    return flavorQtyInputs.reduce((sum, input) => sum + (Math.max(0, parseInt(input.value, 10) || 0)), 0);
   }
 
-  if (modalQtyInput) {
-    flavorCheckboxes.forEach((cb) => cb.addEventListener("change", enforceFlavorLimit));
-    modalQtyInput.addEventListener("input", enforceFlavorLimit);
-    enforceFlavorLimit();
+  function updateModalQuantityAndTotal() {
+    const totalQty = getTotalFlavorQty();
+    if (modalQtyInput) modalQtyInput.value = totalQty;
+
+    const unitPrice = PRICE_TABLE[orderModalSelect.value] || 0;
+    if (modalTotalAmount) modalTotalAmount.textContent = formatVnd(unitPrice * totalQty);
+
+    if (flavorWarning) {
+      const hasQty = totalQty > 0;
+      flavorWarning.hidden = hasQty;
+      if (!hasQty) flavorWarning.textContent = "Vui lòng nhập số lượng cho ít nhất một vị bánh.";
+    }
+  }
+
+  if (flavorQtyInputs.length > 0) {
+    flavorQtyInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        if (input.value !== "" && parseInt(input.value, 10) < 0) input.value = 0;
+        updateModalQuantityAndTotal();
+      });
+    });
+    if (orderModalSelect) orderModalSelect.addEventListener("change", updateModalQuantityAndTotal);
+    updateModalQuantityAndTotal();
   }
 
   /* ---------- 10. GỬI ĐƠN HÀNG VỀ BACKEND ---------- */
 
-  // TODO: thay bằng URL Cloudflare Worker / Backend thật xử lý đơn hàng.
   const API_ENDPOINT = "https://vidisanar-api.tranchuyen091289.workers.dev/api/order";
 
-  const BANKS = {
-    mb: { code: "MB", account: "6619121964", accountName: "BUI THU HA", labelKey: "bank_mb_tab" },
-    vcb: { code: "VCB", account: "0451000402887", accountName: "CONG TY TNHH NUONG BAC", labelKey: "bank_vcb_tab" },
-  };
+  // Chỉ còn duy nhất Vietcombank (đã bỏ tuỳ chọn MB Bank).
+  const VCB_BANK = { code: "VCB", account: "0451000402887", accountName: "CONG TY TNHH NUONG BAC" };
 
   // Đọc mã Affiliate từ URL, ví dụ ?ref=ABC123 — không có thì để rỗng.
   function getAffiliateCode() {
@@ -495,18 +505,22 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${new Intl.NumberFormat("vi-VN").format(n)} đ`;
   }
 
-  function buildVietQrUrl(bankKey, amount, orderId) {
-    const bank = BANKS[bankKey];
+  function buildVietQrUrl(amount, orderId) {
     const params = new URLSearchParams({
       amount: amount,
       addInfo: orderId,
-      accountName: bank.accountName,
+      accountName: VCB_BANK.accountName,
     });
-    return `https://img.vietqr.io/image/${bank.code}-${bank.account}-compact2.png?${params.toString()}`;
+    return `https://img.vietqr.io/image/${VCB_BANK.code}-${VCB_BANK.account}-compact2.png?${params.toString()}`;
   }
 
-  function collectFlavors(form) {
-    return Array.from(form.querySelectorAll('input[name="vi"]:checked')).map((cb) => cb.value);
+  // Trả về chuỗi mô tả dạng "Tháp Rùa: 2, Chùa Một Cột: 2" — chỉ liệt kê
+  // những vị có số lượng > 0, để ghi thẳng vào cột "Vị bánh" (kiểu Text) ở Lark Base.
+  function collectFlavors() {
+    return flavorQtyInputs
+      .filter((input) => (parseInt(input.value, 10) || 0) > 0)
+      .map((input) => `${input.dataset.flavor}: ${parseInt(input.value, 10)}`)
+      .join(", ");
   }
 
   // Gửi đơn hàng lên backend, trả về { order_id, total_amount, ... } khi thành công.
@@ -576,25 +590,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const qrAccountNumber = document.getElementById("qrAccountNumber");
     const qrAccountName = document.getElementById("qrAccountName");
     const qrAmount = document.getElementById("qrAmount");
-    const qrTabs = document.querySelectorAll(".qr-picker__tab");
 
     let currentOrder = null; // { order_id, total_amount }
 
-    function renderQr(bankKey) {
+    function renderQr() {
       if (!currentOrder) return;
-      const bank = BANKS[bankKey];
-      const lang = document.documentElement.lang === "en" ? "en" : "vi";
-      qrImage.src = buildVietQrUrl(bankKey, currentOrder.total_amount, currentOrder.order_id);
-      qrBankName.textContent = translations[lang][bank.labelKey] + " · " + bank.code;
-      qrAccountNumber.textContent = bank.account;
-      qrAccountName.textContent = bank.accountName;
+      qrImage.src = buildVietQrUrl(currentOrder.total_amount, currentOrder.order_id);
+      qrBankName.textContent = "Vietcombank";
+      qrAccountNumber.textContent = VCB_BANK.account;
+      qrAccountName.textContent = VCB_BANK.accountName;
       qrAmount.textContent = formatVnd(currentOrder.total_amount);
-      qrTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.bank === bankKey));
     }
-
-    qrTabs.forEach((tab) => {
-      tab.addEventListener("click", () => renderQr(tab.dataset.bank));
-    });
 
     orderModalFormEl.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -607,13 +613,18 @@ document.addEventListener("DOMContentLoaded", () => {
         diaChi: orderModalFormEl.diaChi.value.trim(),
         sanPham: orderModalSelect.value,
         soLuong: modalQtyInput.value,
-        viBanh: collectFlavors(orderModalFormEl),
+        viBanh: collectFlavors(),
         ghiChu: orderModalFormEl.ghiChu.value.trim(),
         affiliateCode: getAffiliateCode(),
       };
 
       if (!payload.hoTen || !payload.soDienThoai || !payload.diaChi) {
         alert("Vui lòng nhập đủ Họ tên, Điện thoại và Địa chỉ giao hàng.");
+        return;
+      }
+
+      if (getTotalFlavorQty() <= 0) {
+        alert("Vui lòng nhập số lượng cho ít nhất một vị bánh.");
         return;
       }
 
@@ -624,7 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resultOrderId.textContent = result.order_id;
         modalFormFields.hidden = true;
         orderModalResult.hidden = false;
-        renderQr("mb");
+        renderQr();
       } catch (err) {
         alert(err.message);
       } finally {

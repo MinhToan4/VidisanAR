@@ -278,19 +278,23 @@
 
             <ul class="order-card__price-list">
               <li>
-                <span data-i18n="order_price_single_label">Bánh lẻ</span>
-                <strong data-i18n="order_price_single_value">159.000 đ / chiếc</strong>
+                <span data-i18n="order_price_tinhhoa_label">Hộp Vị Di Sản - Tinh Hoa</span>
+                <strong data-i18n="order_price_tinhhoa_value">862.920 đ / hộp</strong>
               </li>
               <li>
-                <span data-i18n="order_price_box_label">Hộp 4 biểu tượng</span>
-                <strong data-i18n="order_price_box_value">599.000 đ / hộp</strong>
+                <span data-i18n="order_price_tuyenchon_label">Hộp Vị Di Sản - Tuyển Chọn</span>
+                <strong data-i18n="order_price_tuyenchon_value">1.078.920 đ / hộp</strong>
+              </li>
+              <li>
+                <span data-i18n="order_price_single_label">Bánh lẻ</span>
+                <strong data-i18n="order_price_single_value">171.720 đ / chiếc</strong>
               </li>
             </ul>
 
-            <span class="order-card__badge" data-i18n="order_save_badge">Tiết kiệm 37.000 đ · save vs. 4 cakes lẻ</span>
+            <p class="order-card__vat-note" data-i18n="order_vat_note">Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.</p>
 
             <div class="order-card__actions">
-              <button type="submit" id="btnOrderBox4" class="btn btn--on-dark" data-i18n="order_btn_box4">Đặt hộp 4 chiếc</button>
+              <button type="submit" id="btnOrderBox4" class="btn btn--on-dark" data-i18n="order_btn_box4">Đặt hộp quà</button>
               <button type="submit" id="btnOrderSingle" class="btn btn--outline-cream" data-i18n="order_btn_single">Mua Bánh lẻ</button>
             </div>
           </div>
@@ -397,42 +401,45 @@
             <div class="order-modal__field">
               <label for="modalSanPham" data-i18n="label_product">Sản phẩm</label>
               <select id="modalSanPham" name="sanPham" class="order-modal__select">
-                <option data-i18n="order_retail_heading">Hộp 4 chiếc "Hà Nội Trong Tôi"</option>
-                <option data-i18n="order_price_single_label">Bánh lẻ</option>
+                <option value="Hộp Vị Di Sản - Tinh Hoa" data-i18n="order_price_tinhhoa_label">Hộp Vị Di Sản - Tinh Hoa</option>
+                <option value="Hộp Vị Di Sản - Tuyển Chọn" data-i18n="order_price_tuyenchon_label">Hộp Vị Di Sản - Tuyển Chọn</option>
+                <option value="Bánh lẻ" data-i18n="order_price_single_label">Bánh lẻ</option>
               </select>
             </div>
             <div class="order-modal__field">
               <label for="modalSoLuong" data-i18n="label_qty_order">Số lượng</label>
-              <input type="number" id="modalSoLuong" name="soLuong" value="1" min="1">
+              <input type="number" id="modalSoLuong" name="soLuong" value="0" readonly tabindex="-1" class="order-modal__field--locked">
             </div>
           </div>
 
           <div class="order-modal__flavors">
-            <label class="order-modal__flavors-title" data-i18n="label_flavors">Chọn vị bánh yêu thích</label>
+            <label class="order-modal__flavors-title" data-i18n="label_flavors">Nhập số lượng theo vị bánh</label>
             <div class="order-modal__flavor-grid">
-              <label class="flavor-check">
-                <input type="checkbox" name="vi" value="thap-rua">
-                <span class="flavor-check__box"></span>
-                <span data-i18n="story2_title">Tháp Rùa</span>
-              </label>
-              <label class="flavor-check">
-                <input type="checkbox" name="vi" value="chua-mot-cot">
-                <span class="flavor-check__box"></span>
-                <span data-i18n="story3_title">Chùa Một Cột</span>
-              </label>
-              <label class="flavor-check">
-                <input type="checkbox" name="vi" value="van-mieu">
-                <span class="flavor-check__box"></span>
-                <span data-i18n="story1_title">Văn Miếu - Quốc Tử Giám</span>
-              </label>
-              <label class="flavor-check">
-                <input type="checkbox" name="vi" value="cau-long-bien">
-                <span class="flavor-check__box"></span>
-                <span data-i18n="story4_title">Cầu Long Biên</span>
-              </label>
+              <div class="flavor-qty">
+                <span class="flavor-qty__label" data-i18n="story2_title">Tháp Rùa</span>
+                <input type="number" class="flavor-qty__input" data-flavor="Tháp Rùa" value="0" min="0">
+              </div>
+              <div class="flavor-qty">
+                <span class="flavor-qty__label" data-i18n="story3_title">Chùa Một Cột</span>
+                <input type="number" class="flavor-qty__input" data-flavor="Chùa Một Cột" value="0" min="0">
+              </div>
+              <div class="flavor-qty">
+                <span class="flavor-qty__label" data-i18n="story1_title">Văn Miếu - Quốc Tử Giám</span>
+                <input type="number" class="flavor-qty__input" data-flavor="Văn Miếu - Quốc Tử Giám" value="0" min="0">
+              </div>
+              <div class="flavor-qty">
+                <span class="flavor-qty__label" data-i18n="story4_title">Cầu Long Biên</span>
+                <input type="number" class="flavor-qty__input" data-flavor="Cầu Long Biên" value="0" min="0">
+              </div>
             </div>
             <p class="flavor-warning" id="flavorWarning" hidden></p>
           </div>
+
+          <div class="order-modal__total">
+            <span data-i18n="label_total">Tổng tiền</span>
+            <strong id="modalTotalAmount">0 đ</strong>
+          </div>
+          <p class="order-modal__vat-note" data-i18n="order_vat_note">Giá niêm yết đã bao gồm 8% VAT. Quý khách vui lòng chuyển khoản đúng số tiền hiển thị.</p>
 
           <div class="order-modal__field">
             <label for="modalGhiChu" data-i18n="label_notes">Ghi chú</label>
@@ -449,18 +456,12 @@
           <h4 class="order-modal__result-title" data-i18n="payment_success_title">Đặt hàng thành công!</h4>
           <p class="order-modal__result-order"><span data-i18n="payment_order_label">Mã đơn hàng:</span> <strong id="resultOrderId"></strong></p>
 
-          <div class="qr-picker">
-            <div class="qr-picker__tabs" role="tablist">
-              <button type="button" class="qr-picker__tab is-active" data-bank="mb" role="tab">
-                <span data-i18n="bank_mb_tab">Cá nhân</span>
-                <small>MB Bank</small>
-              </button>
-              <button type="button" class="qr-picker__tab" data-bank="vcb" role="tab">
-                <span data-i18n="bank_vcb_tab">Công ty</span>
-                <small>Vietcombank</small>
-              </button>
-            </div>
+          <p class="qr-picker__warning">
+            <span aria-hidden="true">⚠</span>
+            <span data-i18n="qr_order_warning">Vui lòng copy / ghi đúng mã đơn hàng (VD: VDS...) vào nội dung chuyển khoản để hệ thống xác nhận tự động.</span>
+          </p>
 
+          <div class="qr-picker">
             <div class="qr-picker__panel">
               <div class="qr-picker__image-wrap">
                 <img class="qr-picker__image" id="qrImage" src="" alt="Mã QR thanh toán">
@@ -468,15 +469,15 @@
               <dl class="qr-picker__info">
                 <div>
                   <dt data-i18n="qr_bank_label">Ngân hàng</dt>
-                  <dd id="qrBankName">MB Bank</dd>
+                  <dd id="qrBankName">Vietcombank</dd>
                 </div>
                 <div>
                   <dt data-i18n="qr_account_number_label">Số tài khoản</dt>
-                  <dd id="qrAccountNumber">6619121964</dd>
+                  <dd id="qrAccountNumber">0451000402887</dd>
                 </div>
                 <div>
                   <dt data-i18n="qr_account_name_label">Chủ tài khoản</dt>
-                  <dd id="qrAccountName">BUI THU HA</dd>
+                  <dd id="qrAccountName">CONG TY TNHH NUONG BAC</dd>
                 </div>
                 <div class="qr-picker__amount">
                   <dt data-i18n="qr_amount_label">Số tiền</dt>

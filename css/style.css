@@ -707,6 +707,13 @@ section { position: relative; }
   margin-bottom: 26px;
 }
 
+.order-card__vat-note {
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(251, 242, 227, 0.55);
+  margin: -8px 0 22px;
+}
+
 .order-card__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
 .order-card__contact {
@@ -857,6 +864,12 @@ section { position: relative; }
 }
 .order-modal__field input::placeholder { color: rgba(251, 242, 227, 0.4); }
 .order-modal__field input:focus { outline: none; border-color: var(--color-gold-light); }
+.order-modal__field input.order-modal__field--locked {
+  color: var(--color-gold-light);
+  font-weight: 700;
+  cursor: not-allowed;
+  border-color: rgba(251, 242, 227, 0.2);
+}
 
 .order-modal__row {
   display: grid;
@@ -892,45 +905,52 @@ section { position: relative; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px 20px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
-.flavor-check {
+.flavor-qty {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  font-size: 14px;
-  cursor: pointer;
+  padding: 8px 12px;
+  background: rgba(251, 242, 227, 0.06);
+  border: 1px solid rgba(251, 242, 227, 0.18);
+  border-radius: 10px;
 }
-.flavor-check input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+.flavor-qty__label { font-size: 13.5px; color: var(--color-cream); }
+.flavor-qty__input {
+  width: 56px;
+  text-align: center;
+  background: rgba(251, 242, 227, 0.08);
+  border: 1px solid var(--color-gold);
+  border-radius: 6px;
+  color: var(--color-gold-light);
+  font-weight: 700;
+  padding: 5px 4px;
 }
-.flavor-check__box {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 4px;
-  position: relative;
-  transition: background var(--transition-base);
+.flavor-qty__input:focus { outline: none; border-color: var(--color-gold-light); }
+
+.order-modal__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 14px;
+  margin-bottom: 6px;
+  border-top: 1px solid rgba(251, 242, 227, 0.2);
+  font-size: 14.5px;
+  color: rgba(251, 242, 227, 0.85);
 }
-.flavor-check input:checked + .flavor-check__box { background: var(--color-gold); }
-.flavor-check input:checked + .flavor-check__box::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 1px;
-  width: 6px;
-  height: 11px;
-  border: solid var(--color-maroon-dark);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+.order-modal__total strong {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  color: var(--color-gold-light);
 }
-.flavor-check input:focus-visible + .flavor-check__box {
-  outline: 2px solid var(--color-gold-light);
-  outline-offset: 2px;
+
+.order-modal__vat-note {
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(251, 242, 227, 0.55);
+  margin-bottom: 20px;
 }
 
 .order-modal__note {
@@ -1000,37 +1020,22 @@ section { position: relative; }
 .order-modal__result-order strong { color: var(--color-gold-light); }
 
 .qr-picker { text-align: left; margin-bottom: 24px; }
-.qr-picker__tabs {
+
+.qr-picker__warning {
   display: flex;
-  gap: 8px;
-  background: rgba(251, 242, 227, 0.08);
-  border-radius: 999px;
-  padding: 5px;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(199, 154, 75, 0.16);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 12px;
+  padding: 12px 16px;
   margin-bottom: 20px;
-}
-.qr-picker__tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 999px;
-  color: rgba(251, 242, 227, 0.7);
-  font-weight: 700;
   font-size: 13.5px;
-  transition: background var(--transition-base), color var(--transition-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--color-gold-light);
 }
-.qr-picker__tab small {
-  font-weight: 500;
-  font-size: 11px;
-  opacity: 0.8;
-}
-.qr-picker__tab.is-active {
-  background: var(--color-gold);
-  color: var(--color-maroon-dark);
-}
-.qr-picker__tab:not(.is-active):hover { color: var(--color-cream); }
+.qr-picker__warning span:first-child { font-size: 18px; line-height: 1.3; flex-shrink: 0; }
 
 .qr-picker__panel {
   display: flex;
