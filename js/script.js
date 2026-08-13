@@ -744,6 +744,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const HOTLINE_FALLBACK_VI = "Xin lỗi, mình chưa hỗ trợ được câu hỏi này. Bạn vui lòng gọi hotline 0915 080 988 để được tư vấn trực tiếp nhé!";
     const HOTLINE_FALLBACK_EN = "Sorry, I can't help with that yet. Please call our hotline 0915 080 988 for direct support!";
 
+    // Khi bàn phím ảo trên điện thoại bật lên, trình duyệt thu nhỏ vùng nhìn
+    // thấy thật (visualViewport) chứ không đổi 100vh — nếu không theo dõi việc
+    // này, khung chat (fixed, cao cố định theo 100vh) sẽ bị bàn phím che mất
+    // phần trên. Đoạn dưới đây cập nhật lại 2 biến CSS để khung chat luôn tự
+    // co lại và nằm gọn ngay phía trên bàn phím, giống kiểu Messenger.
+    function syncChatbotViewport() {
+      const vv = window.visualViewport;
+      if (!vv) return;
+      const keyboardInset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      const gap = window.innerWidth <= 480 ? 12 : 26;
+      chatbotEl.style.setProperty("--chatbot-bottom", `${gap + keyboardInset}px`);
+      chatbotEl.style.setProperty("--chatbot-avail-height", `${Math.max(240, vv.height - 100)}px`);
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", syncChatbotViewport);
+      window.visualViewport.addEventListener("scroll", syncChatbotViewport);
+    }
+    window.addEventListener("resize", syncChatbotViewport);
+    syncChatbotViewport();
+
     function addChatBubble(role, text) {
       const bubble = document.createElement("div");
       bubble.className = `chatbot__msg chatbot__msg--${role === "user" ? "user" : "bot"}`;
@@ -778,6 +798,11 @@ document.addEventListener("DOMContentLoaded", () => {
       else closeChat();
     });
     if (chatbotClose) chatbotClose.addEventListener("click", closeChat);
+
+    // Một số điện thoại báo resize của visualViewport hơi trễ so với lúc
+    // bàn phím thật sự bật/tắt — gọi lại sau một nhịp ngắn cho chắc.
+    chatbotInput.addEventListener("focus", () => setTimeout(syncChatbotViewport, 300));
+    chatbotInput.addEventListener("blur", () => setTimeout(syncChatbotViewport, 300));
 
     // Bấm ra ngoài khung chat (trên nền trang) cũng tự đóng lại, để khách
     // dễ đọc nội dung khác trên trang mà không cần bấm đúng nút X nhỏ.

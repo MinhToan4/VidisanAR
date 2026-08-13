@@ -1319,7 +1319,7 @@ section { position: relative; }
 .chatbot {
   position: fixed;
   right: 26px;
-  bottom: 26px;
+  bottom: var(--chatbot-bottom, 26px);
   z-index: 950;
   display: flex;
   flex-direction: column;
@@ -1350,7 +1350,8 @@ section { position: relative; }
 
 .chatbot__panel {
   width: min(360px, calc(100vw - 40px));
-  height: min(520px, calc(100vh - 140px));
+  height: min(520px, var(--chatbot-avail-height, calc(100vh - 140px)));
+  max-height: var(--chatbot-avail-height, calc(100vh - 140px));
   background: var(--color-maroon);
   color: var(--color-cream);
   border-radius: 22px;
@@ -1359,6 +1360,9 @@ section { position: relative; }
   flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(228, 199, 132, 0.25);
+  /* Chặn điện thoại tự "phóng to" (font boosting) chữ bên trong khung chat hẹp. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 /* .chatbot__panel { display: flex } thắng thế mặc định [hidden]{display:none}
    của trình duyệt (CSS tác giả luôn thắng CSS mặc định) — phải khai báo lại
@@ -1438,12 +1442,14 @@ section { position: relative; }
 }
 .chatbot__form input {
   flex: 1;
+  min-width: 0;
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid rgba(251, 242, 227, 0.3);
   background: rgba(251, 242, 227, 0.08);
   color: var(--color-cream);
-  font-size: 14px;
+  /* Tối thiểu 16px để Safari/iOS không tự zoom cả trang khi bấm vào ô nhập. */
+  font-size: 16px;
 }
 .chatbot__form input::placeholder { color: rgba(251, 242, 227, 0.5); }
 .chatbot__form input:focus { outline: none; border-color: var(--color-gold-light); }
@@ -1462,7 +1468,16 @@ section { position: relative; }
 .chatbot__send:hover { transform: scale(1.08); }
 
 @media (max-width: 480px) {
-  .chatbot { right: 16px; bottom: 16px; }
+  .chatbot { right: 12px; bottom: var(--chatbot-bottom, 12px); }
   .chatbot__toggle { width: 52px; height: 52px; font-size: 21px; }
-  .chatbot__panel { width: calc(100vw - 32px); height: min(70vh, 520px); }
+  .chatbot__panel {
+    width: calc(100vw - 24px);
+    height: min(75vh, var(--chatbot-avail-height, 560px));
+    max-height: var(--chatbot-avail-height, calc(100dvh - 90px));
+  }
+  .chatbot__header { padding: 14px 16px; }
+  .chatbot__header-info { font-size: 14.5px; }
+  .chatbot__messages { padding: 14px; }
+  .chatbot__msg { font-size: 13.5px; max-width: 88%; }
+  .chatbot__hotline { font-size: 11.5px; padding: 0 14px 10px; }
 }
