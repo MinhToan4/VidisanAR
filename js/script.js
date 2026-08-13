@@ -103,6 +103,10 @@ const translations = {
     affiliate_benefit3: "Nhận thông báo hoa hồng và cập nhật qua email",
     affiliate_response_note: "Chúng tôi sẽ gửi mã Affiliate và link giới thiệu riêng của bạn qua email sau khi đăng ký thành công.",
     affiliate_btn_submit: "Đăng ký ngay",
+    label_bank: "Ngân hàng",
+    placeholder_bank: "VD: Vietcombank",
+    label_bank_account: "Số tài khoản",
+    placeholder_bank_account: "Nhập số tài khoản nhận hoa hồng",
 
     modal_title: "Đặt hàng",
     label_phone: "Điện thoại",
@@ -243,6 +247,10 @@ const translations = {
     affiliate_benefit3: "Receive commission updates and news by email",
     affiliate_response_note: "We'll email you your Affiliate code and personal referral link right after you register.",
     affiliate_btn_submit: "Register Now",
+    label_bank: "Bank",
+    placeholder_bank: "e.g. Vietcombank",
+    label_bank_account: "Account Number",
+    placeholder_bank_account: "Enter the account to receive commission",
 
     modal_title: "Place Your Order",
     label_phone: "Phone Number",
@@ -762,10 +770,12 @@ document.addEventListener("DOMContentLoaded", () => {
         hoTen: affiliateRegisterForm.affHoTen.value.trim(),
         soDienThoai: affiliateRegisterForm.affSoDienThoai.value.trim(),
         email: affiliateRegisterForm.affEmail.value.trim(),
+        nganHang: affiliateRegisterForm.affNganHang.value.trim(),
+        soTaiKhoan: affiliateRegisterForm.affSoTaiKhoan.value.trim(),
       };
 
-      if (!payload.hoTen || !payload.soDienThoai || !payload.email) {
-        alert("Vui lòng nhập đủ Họ tên, Số điện thoại và Email.");
+      if (!payload.hoTen || !payload.soDienThoai || !payload.email || !payload.nganHang || !payload.soTaiKhoan) {
+        alert("Vui lòng nhập đủ Họ tên, Số điện thoại, Email, Ngân hàng và Số tài khoản.");
         return;
       }
 
