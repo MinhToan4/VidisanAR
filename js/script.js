@@ -789,16 +789,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function closeChat() {
-      chatbotEl.classList.remove("is-open");
-      chatbotPanel.hidden = true;
-    }
+  chatbotEl.classList.remove("is-open");
+  chatbotPanel.hidden = true;
+}
 
-    chatbotToggle.addEventListener("click", () => {
-      if (chatbotPanel.hidden) openChat();
-      else closeChat();
-    });
-    if (chatbotClose) chatbotClose.addEventListener("click", closeChat);
+chatbotToggle.addEventListener("click", () => {
+  if (chatbotPanel.hidden) openChat();
+  else closeChat();
+});
+if (chatbotClose) chatbotClose.addEventListener("click", closeChat);
 
+<<<<<<< HEAD
     // Một số điện thoại báo resize của visualViewport hơi trễ so với lúc
     // bàn phím thật sự bật/tắt — gọi lại sau một nhịp ngắn cho chắc.
     chatbotInput.addEventListener("focus", () => setTimeout(syncChatbotViewport, 300));
@@ -813,6 +814,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !chatbotPanel.hidden) closeChat();
     });
+=======
+document.addEventListener("click", (e) => {
+  if (!chatbotPanel.hidden && !chatbotEl.contains(e.target)) closeChat();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !chatbotPanel.hidden) closeChat();
+});
+>>>>>>> 191211f60a9ea98ab65c8e743c566162c537349c
 
     chatbotForm.addEventListener("submit", async (e) => {
       e.preventDefault();
