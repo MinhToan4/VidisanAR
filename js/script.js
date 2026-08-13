@@ -96,6 +96,14 @@ const translations = {
     order_response_note: "Phản hồi trong 24 giờ làm việc.",
     order_btn_submit: "Gửi yêu cầu!",
 
+    affiliate_title: "Trở thành Affiliate của Vị Di Sản",
+    affiliate_desc: "Giới thiệu Vị Di Sản tới bạn bè, người thân — nhận hoa hồng cho mỗi đơn hàng thành công qua đường link giới thiệu riêng của bạn.",
+    affiliate_benefit1: "Hoa hồng hấp dẫn cho mỗi đơn hàng thành công qua link của bạn",
+    affiliate_benefit2: "Có mã Affiliate và đường link giới thiệu riêng",
+    affiliate_benefit3: "Nhận thông báo hoa hồng và cập nhật qua email",
+    affiliate_response_note: "Chúng tôi sẽ gửi mã Affiliate và link giới thiệu riêng của bạn qua email sau khi đăng ký thành công.",
+    affiliate_btn_submit: "Đăng ký ngay",
+
     modal_title: "Đặt hàng",
     label_phone: "Điện thoại",
     placeholder_phone: "Nhập số điện thoại",
@@ -111,7 +119,8 @@ const translations = {
 
     payment_success_title: "Đặt hàng thành công!",
     payment_order_label: "Mã đơn hàng:",
-    qr_order_warning: "Vui lòng copy / ghi đúng mã đơn hàng (VD: VDS...) vào nội dung chuyển khoản để hệ thống xác nhận tự động.",
+    qr_order_warning: "Quý khách vui lòng không tự ý thay đổi nội dung chuyển khoản — mỗi đơn hàng đã có nội dung thanh toán riêng để hệ thống tự động xác nhận. Chúng tôi sẽ báo email ngay sau khi thanh toán thành công.",
+    qr_order_support: "Nếu gặp bất kỳ vấn đề gì, vui lòng liên hệ ngay hotline",
     qr_bank_label: "Ngân hàng",
     qr_account_number_label: "Số tài khoản",
     qr_account_name_label: "Chủ tài khoản",
@@ -227,6 +236,14 @@ const translations = {
     order_response_note: "We respond within 24 business hours.",
     order_btn_submit: "Submit Request!",
 
+    affiliate_title: "Become a Vị Di Sản Affiliate",
+    affiliate_desc: "Refer Vị Di Sản to friends and family — earn a commission on every successful order through your own referral link.",
+    affiliate_benefit1: "Attractive commission on every successful order via your link",
+    affiliate_benefit2: "Get your own Affiliate code and referral link",
+    affiliate_benefit3: "Receive commission updates and news by email",
+    affiliate_response_note: "We'll email you your Affiliate code and personal referral link right after you register.",
+    affiliate_btn_submit: "Register Now",
+
     modal_title: "Place Your Order",
     label_phone: "Phone Number",
     placeholder_phone: "Enter your phone number",
@@ -242,7 +259,8 @@ const translations = {
 
     payment_success_title: "Order placed successfully!",
     payment_order_label: "Order code:",
-    qr_order_warning: "Please copy / write the exact order code (e.g. VDS...) in the transfer note so our system can confirm payment automatically.",
+    qr_order_warning: "Please do not change the transfer note yourself — each order has its own unique payment note so our system can confirm it automatically. We will email you right after payment is confirmed.",
+    qr_order_support: "If you run into any issue, please contact our hotline right away at",
     qr_bank_label: "Bank",
     qr_account_number_label: "Account Number",
     qr_account_name_label: "Account Holder",
@@ -720,6 +738,55 @@ document.addEventListener("DOMContentLoaded", () => {
         modalFormFields.hidden = true;
         orderModalResult.hidden = false;
         renderQr();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  /* ---------- 13. FORM ĐĂNG KÝ AFFILIATE: submit + thông báo kết quả ---------- */
+  const AFFILIATE_REGISTER_ENDPOINT = "https://vidisanar-api.tranchuyen091289.workers.dev/api/affiliate/register";
+  const affiliateRegisterForm = document.getElementById("affiliateRegisterForm");
+  const affiliateFormFields = document.getElementById("affiliateFormFields");
+  const affiliateSuccess = document.getElementById("affiliateSuccess");
+  const affiliateSuccessText = document.getElementById("affiliateSuccessText");
+
+  if (affiliateRegisterForm) {
+    affiliateRegisterForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const submitBtn = affiliateRegisterForm.querySelector('button[type="submit"]');
+
+      const payload = {
+        hoTen: affiliateRegisterForm.affHoTen.value.trim(),
+        soDienThoai: affiliateRegisterForm.affSoDienThoai.value.trim(),
+        email: affiliateRegisterForm.affEmail.value.trim(),
+      };
+
+      if (!payload.hoTen || !payload.soDienThoai || !payload.email) {
+        alert("Vui lòng nhập đủ Họ tên, Số điện thoại và Email.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      try {
+        const res = await fetch(AFFILIATE_REGISTER_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.status !== "success") {
+          throw new Error(data.message || "Không thể gửi đăng ký, vui lòng thử lại sau.");
+        }
+
+        const lang = document.documentElement.lang === "en" ? "en" : "vi";
+        affiliateSuccessText.textContent = lang === "en"
+          ? "Thank you! Your Affiliate registration has been received. We'll email you your Affiliate code and personal referral link soon."
+          : "Cảm ơn bạn! Đăng ký Affiliate đã được ghi nhận. Chúng tôi sẽ gửi mã Affiliate và link giới thiệu riêng của bạn qua email trong thời gian sớm nhất.";
+        affiliateFormFields.hidden = true;
+        affiliateSuccess.hidden = false;
       } catch (err) {
         alert(err.message);
       } finally {

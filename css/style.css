@@ -814,6 +814,47 @@ section { position: relative; }
 .order-card__deco--business { left: auto; right: -24px; }
 
 /* =========================================================
+   ĐĂNG KÝ AFFILIATE
+   ========================================================= */
+.affiliate {
+  padding: 90px 0;
+  background: linear-gradient(180deg, var(--color-cream-dark) 0%, var(--color-cream) 100%);
+}
+.affiliate__inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 60px;
+  align-items: center;
+}
+.affiliate__desc { margin-top: 16px; color: var(--color-ink-soft); line-height: 1.7; }
+.affiliate__benefits {
+  list-style: none;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.affiliate__benefits li {
+  position: relative;
+  padding-left: 28px;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+}
+.affiliate__benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-gold);
+  font-weight: 700;
+}
+.affiliate__form { margin: 0; }
+
+@media (max-width: 900px) {
+  .affiliate__inner { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* =========================================================
    POPUP ĐẶT HÀNG (Modal)
    ========================================================= */
 .modal-overlay {
@@ -1071,6 +1112,7 @@ section { position: relative; }
   color: var(--color-gold-light);
 }
 .qr-picker__warning span:first-child { font-size: 18px; line-height: 1.3; flex-shrink: 0; }
+.qr-picker__warning a { color: inherit; text-decoration: underline; }
 
 .qr-picker__panel {
   display: flex;
